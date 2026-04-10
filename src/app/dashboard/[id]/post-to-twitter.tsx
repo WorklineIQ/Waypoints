@@ -30,9 +30,10 @@ export default function PostToTwitter({ sessionId }: { sessionId: string }) {
 
   if (status === "error") {
     return (
-      <span className="text-sm text-red-400" title={errorMsg}>
-        Failed to Post
-      </span>
+      <div className="space-y-1">
+        <span className="text-sm text-red-400">Failed to Post</span>
+        <p className="text-xs text-red-400/60">{errorMsg}</p>
+      </div>
     );
   }
 

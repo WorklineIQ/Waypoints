@@ -85,7 +85,9 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   try {
     await postTweet(accessToken, tweet);
     return "success";
-  } catch {
+  } catch (firstErr) {
+    const firstMsg = firstErr instanceof Error ? firstErr.message : "Unknown error";
+
     // Try refreshing the token
     try {
       const refreshed = await refreshAccessToken(connection.refresh_token);
@@ -104,7 +106,8 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
       await postTweet(accessToken, tweet);
       return "success";
     } catch (refreshErr) {
-      return refreshErr instanceof Error ? refreshErr.message : "Failed to post";
+      const refreshMsg = refreshErr instanceof Error ? refreshErr.message : "";
+      return refreshMsg || firstMsg;
     }
   }
 }
