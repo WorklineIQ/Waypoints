@@ -74,14 +74,45 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
     .eq("id", user.id)
     .single();
 
+  // Calculate streak
+  const { data: allSessions } = await supabase
+    .from("sessions")
+    .select("created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  let streak = 0;
+  if (allSessions && allSessions.length > 0) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const sessionDates = new Set(
+      allSessions.map((s) => {
+        const d = new Date(s.created_at);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      })
+    );
+    const checkDate = new Date(today);
+    if (!sessionDates.has(checkDate.getTime())) {
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+    while (sessionDates.has(checkDate.getTime())) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+  }
+
   // Format the tweet
   let tweet = "";
   if (session.duration_minutes) {
     const hours = Math.floor(session.duration_minutes / 60);
     const mins = session.duration_minutes % 60;
-    tweet += hours > 0 ? `⏱ ${hours}h ${mins}m today\n\n` : `⏱ ${mins}m today\n\n`;
+    tweet += hours > 0 ? `⏱ ${hours}h ${mins}m today\n` : `⏱ ${mins}m today\n`;
   }
-  tweet += `✅ ${session.shipped}`;
+  if (streak > 1) {
+    tweet += `🔥 ${streak} day streak\n`;
+  }
+  tweet += `\n✅ ${session.shipped}`;
   if (session.next) {
     tweet += `\n👉 ${session.next}`;
   }
@@ -135,9 +166,40 @@ export async function postProjectToTwitter(formData: FormData): Promise<string> 
   const remainingMins = totalMinutes % 60;
   const timeStr = totalHours > 0 ? `${totalHours}h ${remainingMins}m` : `${remainingMins}m`;
 
+  // Calculate streak for project post
+  const { data: allUserSessions } = await supabase
+    .from("sessions")
+    .select("created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  let projectStreak = 0;
+  if (allUserSessions && allUserSessions.length > 0) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const sessionDates = new Set(
+      allUserSessions.map((s) => {
+        const d = new Date(s.created_at);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      })
+    );
+    const checkDate = new Date(today);
+    if (!sessionDates.has(checkDate.getTime())) {
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+    while (sessionDates.has(checkDate.getTime())) {
+      projectStreak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+  }
+
   let tweet = `📍 ${project.name}\n\n`;
   tweet += `✅ ${totalSessions} waypoint${totalSessions !== 1 ? "s" : ""} dropped\n`;
   tweet += `⏱ ${timeStr} shipped\n`;
+  if (projectStreak > 1) {
+    tweet += `🔥 ${projectStreak} day streak\n`;
+  }
   tweet += `\nFollow my journey 👇\n`;
   const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
   tweet += `${journeyUrl}\n\n📍 via Waypoints`;
