@@ -91,7 +91,62 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
   tweet += `\n\n📍 via Waypoints\n${journeyUrl}`;
 
-  // Try posting, refresh token if expired
+  return await postTweetWithRefresh(supabase, user.id, connection, tweet);
+}
+
+export async function postProjectToTwitter(formData: FormData): Promise<string> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return "Not authenticated";
+
+  const projectId = formData.get("project_id") as string;
+
+  const { data: project } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", projectId)
+    .single();
+
+  if (!project) return "Project not found";
+
+  const { data: connection } = await supabase
+    .from("twitter_connections")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!connection) return "Twitter not connected";
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
+  const { data: sessions } = await supabase
+    .from("sessions")
+    .select("*")
+    .eq("project_id", projectId);
+
+  const totalSessions = sessions?.length ?? 0;
+  const totalMinutes = sessions?.reduce((sum, s) => sum + (s.duration_minutes ?? 0), 0) ?? 0;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMins = totalMinutes % 60;
+  const timeStr = totalHours > 0 ? `${totalHours}h ${remainingMins}m` : `${remainingMins}m`;
+
+  let tweet = `📍 ${project.name}\n\n`;
+  tweet += `✅ ${totalSessions} waypoint${totalSessions !== 1 ? "s" : ""} dropped\n`;
+  tweet += `⏱ ${timeStr} shipped\n`;
+  tweet += `\nFollow my journey 👇\n`;
+  const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
+  tweet += `${journeyUrl}\n\n📍 via Waypoints`;
+
+  return await postTweetWithRefresh(supabase, user.id, connection, tweet);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function postTweetWithRefresh(supabase: any, userId: string, connection: any, tweet: string): Promise<string> {
   let accessToken = connection.access_token;
   try {
     await postTweet(accessToken, tweet);
@@ -99,12 +154,10 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   } catch (firstErr) {
     const firstMsg = firstErr instanceof Error ? firstErr.message : "Unknown error";
 
-    // Try refreshing the token
     try {
       const refreshed = await refreshAccessToken(connection.refresh_token);
       accessToken = refreshed.access_token;
 
-      // Update stored tokens
       await supabase
         .from("twitter_connections")
         .update({
@@ -112,7 +165,7 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
           refresh_token: refreshed.refresh_token,
           expires_at: new Date(Date.now() + refreshed.expires_in * 1000).toISOString(),
         })
-        .eq("user_id", user.id);
+        .eq("user_id", userId);
 
       await postTweet(accessToken, tweet);
       return "success";

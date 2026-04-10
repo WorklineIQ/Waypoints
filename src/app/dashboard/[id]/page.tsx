@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase-server";
 import SessionTimer from "./session-timer";
 import PostToTwitter from "./post-to-twitter";
+import ShareProject from "./share-project";
 
 export default async function ProjectPage({
   params,
@@ -106,6 +107,10 @@ export default async function ProjectPage({
             <p className="text-sm text-zinc-400">Last Shipped</p>
           </div>
         </div>
+
+        {hasTwitter && totalSessions > 0 && (
+          <ShareProject projectId={id} />
+        )}
 
         <SessionTimer projectId={id} />
 
