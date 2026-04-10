@@ -71,6 +71,10 @@ export default async function SignUpPage({
           </button>
           <p className="text-center text-xs text-zinc-500">
             By signing up, you agree to our{" "}
+            <Link href="/terms" className="text-zinc-400 hover:text-emerald-400">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
             <Link href="/privacy" className="text-zinc-400 hover:text-emerald-400">
               Privacy Policy
             </Link>
