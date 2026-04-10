@@ -136,12 +136,12 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   if (streak > 1) {
     tweet += `🔥 ${streak} day streak\n`;
   }
-  tweet += `\n✅ ${session.shipped}`;
+  tweet += `\n✅ Shipped: ${session.shipped}`;
   if (session.next) {
-    tweet += `\n👉 ${session.next}`;
+    tweet += `\n👉 Next: ${session.next}`;
   }
   if (session.blockers) {
-    tweet += `\n🚧 ${session.blockers}`;
+    tweet += `\n🚧 Blocker: ${session.blockers}`;
   }
   tweet += "\n\n📍 via Waypoints";
 
