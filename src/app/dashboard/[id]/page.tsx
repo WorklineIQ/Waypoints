@@ -53,22 +53,58 @@ export default async function ProjectPage({
     .eq("project_id", id)
     .order("created_at", { ascending: false });
 
+  // Calculate stats
+  const totalSessions = sessions?.length ?? 0;
+  const totalMinutes = sessions?.reduce((sum, s) => sum + (s.duration_minutes ?? 0), 0) ?? 0;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMins = totalMinutes % 60;
+
   return (
     <div className="flex flex-1 justify-center px-4 py-16">
       <div className="w-full max-w-2xl space-y-10">
         <div>
-          <Link
-            href="/dashboard"
-            className="text-base text-zinc-400 transition-colors hover:text-zinc-300"
-          >
-            &larr; Back to Projects
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link
+              href="/dashboard"
+              className="text-base text-zinc-400 transition-colors hover:text-zinc-300"
+            >
+              &larr; Back to Projects
+            </Link>
+            <a
+              href={`/${profile.username}`}
+              target="_blank"
+              className="text-sm text-zinc-500 transition-colors hover:text-zinc-300"
+            >
+              View Public Page &rarr;
+            </a>
+          </div>
           <h1 className="mt-3 text-4xl font-bold tracking-tight">
             {project.name}
           </h1>
           {project.description && (
             <p className="mt-1.5 text-base text-zinc-400">{project.description}</p>
           )}
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-zinc-100">{totalSessions}</p>
+            <p className="text-sm text-zinc-400">Waypoints</p>
+          </div>
+          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-zinc-100">
+              {totalHours > 0 ? `${totalHours}h ${remainingMins}m` : `${remainingMins}m`}
+            </p>
+            <p className="text-sm text-zinc-400">Total Time</p>
+          </div>
+          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-zinc-100">
+              {totalSessions > 0
+                ? new Date(sessions![0].created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                : "—"}
+            </p>
+            <p className="text-sm text-zinc-400">Last Shipped</p>
+          </div>
         </div>
 
         <SessionTimer projectId={id} />
