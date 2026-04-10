@@ -93,8 +93,7 @@ export default async function DashboardPage({
     }
   }
 
-  // Get first name from email
-  const displayName = user.email?.split("@")[0] ?? "maker";
+  const displayName = profile.username;
 
   return (
     <div className="flex flex-1 justify-center px-4 py-16">
