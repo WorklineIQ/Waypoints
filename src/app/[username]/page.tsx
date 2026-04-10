@@ -148,26 +148,46 @@ export default async function JourneyPage({
           )}
 
           {projects && projects.length > 0 ? (
-            <div className="space-y-10">
+            <div className="space-y-6">
               {projects.map((project) => {
                 const projectSessions = sessionsByProject.get(project.id) ?? [];
+                const projectMinutes = projectSessions.reduce((sum, s) => sum + (s.duration_minutes ?? 0), 0);
+                const pH = Math.floor(projectMinutes / 60);
+                const pM = projectMinutes % 60;
                 return (
-                  <div key={project.id}>
-                    <h2 className="text-2xl font-semibold text-zinc-100">
-                      {project.name}
-                    </h2>
-                    {project.description && (
-                      <p className="mt-1.5 text-base text-zinc-400">
-                        {project.description}
-                      </p>
-                    )}
+                  <div
+                    key={project.id}
+                    className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="text-xl font-semibold text-zinc-100">
+                          {project.name}
+                        </h2>
+                        {project.description && (
+                          <p className="mt-1 text-base text-zinc-400">
+                            {project.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex shrink-0 items-center gap-3">
+                        <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">
+                          {projectSessions.length} waypoint{projectSessions.length !== 1 ? "s" : ""}
+                        </span>
+                        {projectMinutes > 0 && (
+                          <span className="rounded-full bg-zinc-800 px-3 py-1 text-sm text-zinc-400">
+                            {pH > 0 ? `${pH}h ${pM}m` : `${pM}m`}
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
                     {projectSessions.length > 0 ? (
-                      <ul className="mt-4 space-y-3">
+                      <ul className="mt-5 space-y-3">
                         {projectSessions.map((session) => (
                           <li
                             key={session.id}
-                            className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4 transition-colors hover:border-zinc-700"
+                            className="rounded-lg border border-zinc-800/50 bg-zinc-900/50 px-4 py-3"
                           >
                             <div className="flex items-start justify-between gap-4">
                               <p className="text-base font-medium text-zinc-100">
@@ -186,20 +206,19 @@ export default async function JourneyPage({
                                     {
                                       month: "short",
                                       day: "numeric",
-                                      year: "numeric",
                                     }
                                   )}
                                 </time>
                               </div>
                             </div>
                             {session.next && (
-                              <p className="mt-2 text-base text-zinc-400">
+                              <p className="mt-2 text-sm text-zinc-400">
                                 <span className="text-zinc-300">Next:</span>{" "}
                                 {session.next}
                               </p>
                             )}
                             {session.blockers && (
-                              <p className="mt-1 text-base text-zinc-400">
+                              <p className="mt-1 text-sm text-zinc-400">
                                 <span className="text-zinc-300">Blockers:</span>{" "}
                                 {session.blockers}
                               </p>
