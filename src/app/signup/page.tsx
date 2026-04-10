@@ -63,22 +63,31 @@ export default async function SignUpPage({
             />
           </div>
 
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="agreed"
+              required
+              className="mt-1 h-4 w-4 shrink-0 rounded border-zinc-700 bg-zinc-900 text-emerald-500 focus:ring-emerald-500/50 accent-emerald-500"
+            />
+            <span className="text-sm text-zinc-400">
+              I agree to the{" "}
+              <Link href="/terms" className="text-zinc-300 hover:text-emerald-400" target="_blank">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" className="text-zinc-300 hover:text-emerald-400" target="_blank">
+                Privacy Policy
+              </Link>
+            </span>
+          </label>
+
           <button
             type="submit"
             className="w-full rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-4 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
           >
             Sign Up
           </button>
-          <p className="text-center text-xs text-zinc-500">
-            By signing up, you agree to our{" "}
-            <Link href="/terms" className="text-zinc-400 hover:text-emerald-400">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="text-zinc-400 hover:text-emerald-400">
-              Privacy Policy
-            </Link>
-          </p>
         </form>
 
         <p className="text-center text-base text-zinc-400">
