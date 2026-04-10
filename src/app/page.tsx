@@ -46,6 +46,9 @@ export default function Home() {
         <p className="text-sm text-zinc-600">
           Free to use. No credit card required.
         </p>
+        <Link href="/privacy" className="text-xs text-zinc-600 hover:text-zinc-400">
+          Privacy Policy
+        </Link>
       </main>
     </div>
   );
