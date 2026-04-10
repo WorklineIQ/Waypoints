@@ -98,13 +98,6 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
     return "Twitter not connected";
   }
 
-  // Get username for journey page link
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("username")
-    .eq("id", user.id)
-    .single();
-
   // Calculate streak
   const { data: allSessions } = await supabase
     .from("sessions")
@@ -150,8 +143,7 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   if (session.blockers) {
     tweet += `\n🚧 ${session.blockers}`;
   }
-  const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
-  tweet += `\n\n📍 via Waypoints\n${journeyUrl}`;
+  tweet += "\n\n📍 via Waypoints";
 
   return await postTweetWithRefresh(supabase, user.id, connection, tweet);
 }
