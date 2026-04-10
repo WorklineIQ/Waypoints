@@ -101,6 +101,18 @@ export default async function DashboardPage({
           )}
         </div>
 
+        <div className="grid grid-cols-2 gap-3">
+          {["LinkedIn", "Threads", "Bluesky", "Facebook"].map((platform) => (
+            <div
+              key={platform}
+              className="flex items-center justify-between rounded-lg border border-zinc-800/50 px-4 py-3 opacity-50"
+            >
+              <p className="text-base text-zinc-400">{platform}</p>
+              <span className="text-sm text-zinc-600">Coming Soon</span>
+            </div>
+          ))}
+        </div>
+
         <form action={createProject} className="space-y-3">
           <div className="flex gap-3">
             <input
