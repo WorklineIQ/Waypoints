@@ -166,48 +166,63 @@ export default async function DashboardPage({
 
         <div>
           <h2 className="mb-4 text-xl font-medium text-zinc-300">Projects</h2>
-          <form action={createProject} className="space-y-3">
-            <div className="flex gap-3">
+          {(!projects || projects.length === 0) ? (
+            <form action={createProject} className="space-y-3">
+              <div className="flex gap-3">
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  placeholder="Project name"
+                  className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                />
+                <button
+                  type="submit"
+                  className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
+                >
+                  Create
+                </button>
+              </div>
               <input
-                name="name"
+                name="description"
                 type="text"
-                required
-                placeholder="Project name"
-                className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                placeholder="Description (optional)"
+                className="block w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
               />
-              <button
-                type="submit"
-                className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
-              >
-                Create
-              </button>
-            </div>
-            <input
-              name="description"
-              type="text"
-              placeholder="Description (optional)"
-              className="block w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
-            />
-          </form>
+            </form>
+          ) : null}
 
           {projects && projects.length > 0 ? (
-            <ul className="mt-4 space-y-3">
-              {projects.map((project) => (
-                <li key={project.id}>
-                  <Link
-                    href={`/dashboard/${project.id}`}
-                    className="block rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4 transition-all hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-emerald-500/5"
-                  >
-                    <h2 className="text-lg font-medium text-zinc-100">{project.name}</h2>
-                    {project.description && (
-                      <p className="mt-1 text-base text-zinc-400">
-                        {project.description}
-                      </p>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="mt-4 space-y-3">
+                {projects.map((project) => (
+                  <li key={project.id}>
+                    <Link
+                      href={`/dashboard/${project.id}`}
+                      className="block rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4 transition-all hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-emerald-500/5"
+                    >
+                      <h2 className="text-lg font-medium text-zinc-100">{project.name}</h2>
+                      {project.description && (
+                        <p className="mt-1 text-base text-zinc-400">
+                          {project.description}
+                        </p>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 rounded-lg border border-dashed border-zinc-700 bg-zinc-900/30 px-5 py-5 text-center">
+                <p className="text-base font-medium text-zinc-300">
+                  Want to Track More Projects?
+                </p>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Upgrade to Pro for unlimited projects, more platforms, and remove the Waypoints badge.
+                </p>
+                <p className="mt-3 text-sm font-medium text-emerald-400">
+                  $7/month — Coming Soon
+                </p>
+              </div>
+            </>
           ) : (
             <div className="mt-6 rounded-lg border border-dashed border-zinc-700 bg-zinc-900/30 px-5 py-8 text-center">
               <p className="text-lg font-medium text-zinc-300">
