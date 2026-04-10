@@ -80,7 +80,7 @@ export default async function ProjectPage({
               View Public Page &rarr;
             </a>
           </div>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight">
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
             {project.name}
           </h1>
           {project.description && (

@@ -117,7 +117,7 @@ export default async function JourneyPage({
               {profile.username.charAt(0).toUpperCase()}
             </div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 {profile.username}
               </h1>
               <p className="mt-0.5 text-base text-zinc-400">

@@ -98,16 +98,16 @@ export default async function DashboardPage({
   return (
     <div className="flex flex-1 justify-center px-4 py-16">
       <div className="w-full max-w-2xl space-y-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-lg font-bold text-white shadow-lg shadow-emerald-500/20">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-lg font-bold text-white shadow-lg shadow-emerald-500/20">
               W
             </div>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 Welcome Back
               </h1>
-              <p className="mt-0.5 text-sm text-zinc-400">
+              <p className="mt-0.5 text-sm text-zinc-400 truncate">
                 {timeSinceLastStr || "Ready to drop your first waypoint"}
               </p>
             </div>
@@ -115,7 +115,7 @@ export default async function DashboardPage({
           <form action={signOut}>
             <button
               type="submit"
-              className="rounded-full border border-zinc-800 px-5 py-2 text-base text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200"
+              className="shrink-0 rounded-full border border-zinc-800 px-4 py-1.5 text-sm text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200"
             >
               Sign Out
             </button>
@@ -153,12 +153,12 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-lg border border-zinc-800/50 bg-zinc-900/30 px-4 py-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg border border-zinc-800/50 bg-zinc-900/30 px-4 py-3">
           <p className="text-sm text-zinc-400">Your Public Journey Page</p>
           <a
             href={`/${profile.username}`}
             target="_blank"
-            className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+            className="text-sm text-emerald-400 transition-colors hover:text-emerald-300 truncate"
           >
             waypoints.fyi/{profile.username}
           </a>
@@ -168,7 +168,7 @@ export default async function DashboardPage({
           <h2 className="mb-4 text-xl font-medium text-zinc-300">Projects</h2>
           {(!projects || projects.length === 0) ? (
             <form action={createProject} className="space-y-3">
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   name="name"
                   type="text"
