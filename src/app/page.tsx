@@ -3,12 +3,22 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex flex-1 items-center justify-center">
-      <main className="flex flex-col items-center gap-8 text-center">
+      <main className="flex flex-col items-center gap-8 text-center px-4">
         <h1 className="text-6xl font-bold tracking-tight">Waypoints</h1>
         <p className="text-xl text-zinc-400">
           Drop a Waypoint. Share Your Journey.
         </p>
-        <div className="mt-4 flex gap-4">
+        <div className="max-w-md space-y-3">
+          <p className="text-base text-zinc-400">
+            The build-in-public journal for indie makers. Start a session,
+            log what you shipped, and share it to Twitter with one click.
+          </p>
+          <p className="text-sm text-zinc-500">
+            Every update stacks into your public journey page.
+            Every post links back to you.
+          </p>
+        </div>
+        <div className="mt-2 flex gap-4">
           <Link
             href="/signin"
             className="rounded-lg bg-white px-6 py-2.5 text-base font-medium text-black transition-colors hover:bg-zinc-200"
