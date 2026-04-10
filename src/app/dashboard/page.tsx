@@ -40,6 +40,62 @@ export default async function DashboardPage({
     .select("*")
     .order("created_at", { ascending: false });
 
+  // Fetch all sessions for stats
+  const { data: allSessions } = await supabase
+    .from("sessions")
+    .select("created_at, duration_minutes")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  // Calculate stats
+  const totalWaypoints = allSessions?.length ?? 0;
+  const totalMinutes = allSessions?.reduce((sum, s) => sum + (s.duration_minutes ?? 0), 0) ?? 0;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const remainingMins = totalMinutes % 60;
+
+  // Calculate streak (consecutive days with at least one session)
+  let streak = 0;
+  if (allSessions && allSessions.length > 0) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const sessionDates = new Set(
+      allSessions.map((s) => {
+        const d = new Date(s.created_at);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      })
+    );
+    const checkDate = new Date(today);
+    // Check if there's a session today or yesterday to start the streak
+    if (!sessionDates.has(checkDate.getTime())) {
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+    while (sessionDates.has(checkDate.getTime())) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    }
+  }
+
+  // Time since last waypoint
+  const lastSession = allSessions?.[0];
+  let timeSinceLastStr = "";
+  if (lastSession) {
+    const diff = Date.now() - new Date(lastSession.created_at).getTime();
+    const diffMins = Math.floor(diff / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays > 0) {
+      timeSinceLastStr = `Last waypoint ${diffDays}d ago`;
+    } else if (diffHours > 0) {
+      timeSinceLastStr = `Last waypoint ${diffHours}h ago`;
+    } else {
+      timeSinceLastStr = `Last waypoint ${diffMins}m ago`;
+    }
+  }
+
+  // Get first name from email
+  const displayName = user.email?.split("@")[0] ?? "maker";
+
   return (
     <div className="flex flex-1 justify-center px-4 py-16">
       <div className="w-full max-w-2xl space-y-10">
@@ -49,8 +105,12 @@ export default async function DashboardPage({
               W
             </div>
             <div>
-              <h1 className="text-4xl font-bold tracking-tight">Your Projects</h1>
-              <p className="mt-0.5 text-base text-zinc-400">{user.email}</p>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Welcome Back, {displayName}
+              </h1>
+              <p className="mt-0.5 text-sm text-zinc-400">
+                {timeSinceLastStr || "Ready to drop your first waypoint"}
+              </p>
             </div>
           </div>
           <form action={signOut}>
@@ -75,53 +135,91 @@ export default async function DashboardPage({
           </div>
         )}
 
-        <form action={createProject} className="space-y-3">
-          <div className="flex gap-3">
-            <input
-              name="name"
-              type="text"
-              required
-              placeholder="Project name"
-              className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
-            />
-            <button
-              type="submit"
-              className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
-            >
-              Create
-            </button>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">{totalWaypoints}</p>
+            <p className="text-sm text-zinc-400">Waypoints</p>
           </div>
-          <input
-            name="description"
-            type="text"
-            placeholder="Description (optional)"
-            className="block w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
-          />
-        </form>
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">
+              {totalHours > 0 ? `${totalHours}h ${remainingMins}m` : `${remainingMins}m`}
+            </p>
+            <p className="text-sm text-zinc-400">Shipped</p>
+          </div>
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">
+              {streak > 0 ? `${streak}d` : "0d"}
+            </p>
+            <p className="text-sm text-zinc-400">Streak</p>
+          </div>
+        </div>
 
-        {projects && projects.length > 0 ? (
-          <ul className="space-y-3">
-            {projects.map((project) => (
-              <li key={project.id}>
-                <Link
-                  href={`/dashboard/${project.id}`}
-                  className="block rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4 transition-all hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-emerald-500/5"
-                >
-                  <h2 className="text-lg font-medium text-zinc-100">{project.name}</h2>
-                  {project.description && (
-                    <p className="mt-1 text-base text-zinc-400">
-                      {project.description}
-                    </p>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center text-base text-zinc-400">
-            No Projects Yet. Create One to Start Dropping Waypoints.
-          </p>
-        )}
+        <div className="flex items-center justify-between rounded-lg border border-zinc-800/50 bg-zinc-900/30 px-4 py-3">
+          <p className="text-sm text-zinc-400">Your Public Journey Page</p>
+          <a
+            href={`/${profile.username}`}
+            target="_blank"
+            className="text-sm text-emerald-400 transition-colors hover:text-emerald-300"
+          >
+            waypoints.fyi/{profile.username}
+          </a>
+        </div>
+
+        <div>
+          <h2 className="mb-4 text-xl font-medium text-zinc-300">Projects</h2>
+          <form action={createProject} className="space-y-3">
+            <div className="flex gap-3">
+              <input
+                name="name"
+                type="text"
+                required
+                placeholder="Project name"
+                className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+              />
+              <button
+                type="submit"
+                className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
+              >
+                Create
+              </button>
+            </div>
+            <input
+              name="description"
+              type="text"
+              placeholder="Description (optional)"
+              className="block w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+            />
+          </form>
+
+          {projects && projects.length > 0 ? (
+            <ul className="mt-4 space-y-3">
+              {projects.map((project) => (
+                <li key={project.id}>
+                  <Link
+                    href={`/dashboard/${project.id}`}
+                    className="block rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4 transition-all hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-lg hover:shadow-emerald-500/5"
+                  >
+                    <h2 className="text-lg font-medium text-zinc-100">{project.name}</h2>
+                    {project.description && (
+                      <p className="mt-1 text-base text-zinc-400">
+                        {project.description}
+                      </p>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-6 rounded-lg border border-dashed border-zinc-700 bg-zinc-900/30 px-5 py-8 text-center">
+              <p className="text-lg font-medium text-zinc-300">
+                Every Journey Starts With a Single Waypoint
+              </p>
+              <p className="mt-2 text-base text-zinc-500">
+                Create your first project above to start shipping.
+              </p>
+            </div>
+          )}
+        </div>
 
         <div>
           <h2 className="mb-4 text-xl font-medium text-zinc-300">Connected Platforms</h2>
