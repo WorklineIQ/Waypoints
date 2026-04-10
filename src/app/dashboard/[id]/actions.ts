@@ -85,6 +85,9 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   if (session.next) {
     tweet += `\nNext: ${session.next}`;
   }
+  if (session.blockers) {
+    tweet += `\nBlockers: ${session.blockers}`;
+  }
   const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
   tweet += `\n\n— via Waypoints\n${journeyUrl}`;
 
