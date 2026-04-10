@@ -1,5 +1,28 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
+  return {
+    title: `${username} — Building in Public`,
+    description: `Follow ${username}'s build-in-public journey on Waypoints.`,
+    openGraph: {
+      title: `${username} — Building in Public on Waypoints`,
+      description: `Follow ${username}'s build-in-public journey on Waypoints.`,
+      url: `https://waypoints.fyi/${username}`,
+    },
+    twitter: {
+      card: "summary",
+      title: `${username} — Building in Public on Waypoints`,
+      description: `Follow ${username}'s build-in-public journey on Waypoints.`,
+    },
+  };
+}
 
 export default async function JourneyPage({
   params,

@@ -13,9 +13,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Waypoints — Drop a waypoint. Share your journey.",
+  title: {
+    default: "Waypoints — Drop a Waypoint. Share Your Journey.",
+    template: "%s | Waypoints",
+  },
   description:
     "A build-in-public journal for indie makers and solopreneurs. Log what you shipped, share to socials with one click.",
+  metadataBase: new URL("https://waypoints.fyi"),
+  openGraph: {
+    title: "Waypoints — Drop a Waypoint. Share Your Journey.",
+    description:
+      "A build-in-public journal for indie makers and solopreneurs. Log what you shipped, share to socials with one click.",
+    url: "https://waypoints.fyi",
+    siteName: "Waypoints",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Waypoints — Drop a Waypoint. Share Your Journey.",
+    description:
+      "A build-in-public journal for indie makers and solopreneurs. Log what you shipped, share to socials with one click.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
