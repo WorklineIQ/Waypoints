@@ -11,6 +11,16 @@ export async function createProject(formData: FormData) {
     throw new Error("Not authenticated");
   }
 
+  // Enforce 1 project limit on free tier
+  const { count } = await supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
+  if (count && count >= 1) {
+    throw new Error("Free tier is limited to 1 project. Upgrade to Pro for unlimited projects.");
+  }
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
 
