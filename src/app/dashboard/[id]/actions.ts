@@ -67,6 +67,13 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
     return "Twitter not connected";
   }
 
+  // Get username for journey page link
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
   // Format the tweet
   let tweet = "";
   if (session.duration_minutes) {
@@ -78,7 +85,8 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   if (session.next) {
     tweet += `\nNext: ${session.next}`;
   }
-  tweet += "\n\n— via Waypoints";
+  const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
+  tweet += `\n\n— via Waypoints\n${journeyUrl}`;
 
   // Try posting, refresh token if expired
   let accessToken = connection.access_token;
