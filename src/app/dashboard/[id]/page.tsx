@@ -88,18 +88,18 @@ export default async function ProjectPage({
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
-            <p className="text-2xl font-bold text-zinc-100">{totalSessions}</p>
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">{totalSessions}</p>
             <p className="text-sm text-zinc-400">Waypoints</p>
           </div>
-          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
-            <p className="text-2xl font-bold text-zinc-100">
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">
               {totalHours > 0 ? `${totalHours}h ${remainingMins}m` : `${remainingMins}m`}
             </p>
             <p className="text-sm text-zinc-400">Total Time</p>
           </div>
-          <div className="rounded-lg border border-zinc-800 px-4 py-3 text-center">
-            <p className="text-2xl font-bold text-zinc-100">
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-emerald-400">
               {totalSessions > 0
                 ? new Date(sessions![0].created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })
                 : "—"}
@@ -128,7 +128,7 @@ export default async function ProjectPage({
               {sessions.map((session) => (
                 <li
                   key={session.id}
-                  className="rounded-lg border border-zinc-800 px-5 py-4"
+                  className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <p className="text-base font-medium text-zinc-100">

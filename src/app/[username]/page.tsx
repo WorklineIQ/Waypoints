@@ -97,7 +97,7 @@ export default async function JourneyPage({
                       {projectSessions.map((session) => (
                         <li
                           key={session.id}
-                          className="rounded-lg border border-zinc-800 px-5 py-4"
+                          className="rounded-lg border border-zinc-800 bg-zinc-900/50 px-5 py-4"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <p className="text-base font-medium text-zinc-100">
@@ -155,7 +155,7 @@ export default async function JourneyPage({
         <footer className="border-t border-zinc-800 pt-6 text-center">
           <a
             href="https://waypoints.fyi"
-            className="text-sm text-zinc-500 transition-colors hover:text-zinc-400"
+            className="text-sm text-zinc-500 transition-colors hover:text-emerald-400"
           >
             Built with Waypoints &mdash; waypoints.fyi
           </a>

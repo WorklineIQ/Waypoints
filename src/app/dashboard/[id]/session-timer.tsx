@@ -47,7 +47,7 @@ export default function SessionTimer({ projectId }: { projectId: string }) {
         </h2>
         <button
           onClick={handleStart}
-          className="rounded-lg bg-white px-5 py-2.5 text-base font-medium text-black transition-colors hover:bg-zinc-200"
+          className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
         >
           Start Session
         </button>
@@ -62,7 +62,7 @@ export default function SessionTimer({ projectId }: { projectId: string }) {
           Session in Progress
         </h2>
         <div className="flex items-center gap-6">
-          <span className="font-mono text-4xl font-bold tracking-tight text-zinc-100">
+          <span className="font-mono text-4xl font-bold tracking-tight text-emerald-400">
             {formatTime(elapsed)}
           </span>
           <button
@@ -107,7 +107,7 @@ export default function SessionTimer({ projectId }: { projectId: string }) {
             name="shipped"
             required
             rows={2}
-            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
+            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
             placeholder="Shipped the auth flow, connected Supabase..."
           />
         </div>
@@ -122,7 +122,7 @@ export default function SessionTimer({ projectId }: { projectId: string }) {
             id="next"
             name="next"
             rows={2}
-            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
+            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
             placeholder="Working on the dashboard next..."
           />
         </div>
@@ -137,13 +137,13 @@ export default function SessionTimer({ projectId }: { projectId: string }) {
             id="blockers"
             name="blockers"
             rows={2}
-            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
+            className="mt-1.5 block w-full rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-base text-zinc-100 placeholder-zinc-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
             placeholder="Waiting on API keys..."
           />
         </div>
         <button
           type="submit"
-          className="rounded-lg bg-white px-5 py-2.5 text-base font-medium text-black transition-colors hover:bg-zinc-200"
+          className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-5 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
         >
           Ship It
         </button>
