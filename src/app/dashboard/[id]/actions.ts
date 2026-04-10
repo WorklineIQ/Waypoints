@@ -35,6 +35,37 @@ export async function createSession(formData: FormData) {
   revalidatePath(`/dashboard/${projectId}`);
 }
 
+export async function updateSession(formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Not authenticated");
+  }
+
+  const sessionId = formData.get("session_id") as string;
+  const projectId = formData.get("project_id") as string;
+  const shipped = formData.get("shipped") as string;
+  const next = formData.get("next") as string;
+  const blockers = formData.get("blockers") as string;
+
+  const { error } = await supabase
+    .from("sessions")
+    .update({
+      shipped,
+      next: next || null,
+      blockers: blockers || null,
+    })
+    .eq("id", sessionId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath(`/dashboard/${projectId}`);
+}
+
 export async function postSessionToTwitter(formData: FormData): Promise<string> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

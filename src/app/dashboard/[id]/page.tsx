@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase-server";
 import SessionTimer from "./session-timer";
 import PostToTwitter from "./post-to-twitter";
 import ShareProject from "./share-project";
+import EditSession from "./edit-session";
 
 export default async function ProjectPage({
   params,
@@ -165,11 +166,12 @@ export default async function ProjectPage({
                       {session.blockers}
                     </p>
                   )}
-                  {hasTwitter && (
-                    <div className="mt-3 border-t border-zinc-800 pt-3">
+                  <div className="mt-3 border-t border-zinc-800 pt-3 flex items-center gap-4">
+                    {hasTwitter && (
                       <PostToTwitter sessionId={session.id} />
-                    </div>
-                  )}
+                    )}
+                    <EditSession session={session} projectId={id} />
+                  </div>
                 </li>
               ))}
             </ul>
