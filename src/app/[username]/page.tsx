@@ -101,6 +101,7 @@ export default async function JourneyPage({
                         >
                           <div className="flex items-start justify-between gap-4">
                             <p className="text-base font-medium text-zinc-100">
+                              <span className="text-zinc-300">Shipped:</span>{" "}
                               {session.shipped}
                             </p>
                             <div className="flex shrink-0 items-center gap-3">
