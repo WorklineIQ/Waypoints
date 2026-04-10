@@ -166,10 +166,12 @@ export default async function ProjectPage({
                       {session.blockers}
                     </p>
                   )}
-                  <div className="mt-3 border-t border-zinc-800 pt-3 flex items-center gap-4">
-                    {hasTwitter && (
-                      <PostToTwitter sessionId={session.id} />
-                    )}
+                  <div className="mt-3 border-t border-zinc-800 pt-3 flex items-center justify-between">
+                    <div>
+                      {hasTwitter && (
+                        <PostToTwitter sessionId={session.id} />
+                      )}
+                    </div>
                     <EditSession session={session} projectId={id} />
                   </div>
                 </li>
