@@ -105,7 +105,7 @@ export default async function DashboardPage({
             </div>
             <div>
               <h1 className="text-3xl font-bold tracking-tight">
-                Welcome Back, {displayName}
+                Welcome Back
               </h1>
               <p className="mt-0.5 text-sm text-zinc-400">
                 {timeSinceLastStr || "Ready to drop your first waypoint"}

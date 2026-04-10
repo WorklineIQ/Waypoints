@@ -2,43 +2,51 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <main className="flex flex-col items-center gap-8 text-center px-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 text-xl font-bold text-white shadow-lg shadow-emerald-500/20">
+    <div className="flex flex-1 flex-col">
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-zinc-800/50">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-green-600 text-sm font-bold text-white">
             W
           </div>
-          <h1 className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-6xl font-bold tracking-tight text-transparent">
-            Waypoints
-          </h1>
+          <span className="text-lg font-semibold text-zinc-100">Waypoints</span>
         </div>
-        <p className="text-xl text-zinc-400">
-          Drop a Waypoint. Share Your Journey.
-        </p>
-        <div className="max-w-md space-y-3">
-          <p className="text-base text-zinc-400">
-            The build-in-public journal for indie makers. Start a session,
-            log what you shipped, and share it to Twitter with one click.
-          </p>
-          <p className="text-sm text-zinc-500">
-            Every update stacks into your public journey page.
-            Every post links back to you.
-          </p>
-        </div>
-        <div className="mt-2 flex gap-4">
+        <div className="flex items-center gap-3">
           <Link
             href="/signin"
-            className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-6 py-2.5 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
+            className="px-4 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-100"
           >
             Sign In
           </Link>
           <Link
             href="/signup"
-            className="rounded-lg border border-zinc-700 px-6 py-2.5 text-base font-medium text-zinc-300 transition-colors hover:border-emerald-500/50 hover:text-zinc-100"
+            className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-4 py-1.5 text-sm font-medium text-white transition-all hover:brightness-110"
           >
-            Sign Up
+            Get Started
           </Link>
         </div>
+      </nav>
+
+      <main className="flex flex-1 flex-col items-center justify-center gap-8 px-4 text-center">
+        <h1 className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-6xl font-bold tracking-tight text-transparent">
+          Drop a Waypoint.
+          <br />
+          Share Your Journey.
+        </h1>
+        <p className="max-w-lg text-lg text-zinc-400">
+          The build-in-public journal for indie makers. Start a session,
+          log what you shipped, and share it to Twitter with one click.
+        </p>
+        <div className="mt-2 flex gap-4">
+          <Link
+            href="/signup"
+            className="rounded-lg bg-gradient-to-r from-emerald-400 to-green-600 px-8 py-3 text-base font-medium text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 hover:brightness-110"
+          >
+            Start Shipping
+          </Link>
+        </div>
+        <p className="text-sm text-zinc-600">
+          Free to use. No credit card required.
+        </p>
       </main>
     </div>
   );
