@@ -79,17 +79,17 @@ export async function postSessionToTwitter(formData: FormData): Promise<string> 
   if (session.duration_minutes) {
     const hours = Math.floor(session.duration_minutes / 60);
     const mins = session.duration_minutes % 60;
-    tweet += hours > 0 ? `⏱ ${hours}h ${mins}m today\n` : `⏱ ${mins}m today\n`;
+    tweet += hours > 0 ? `⏱ ${hours}h ${mins}m today\n\n` : `⏱ ${mins}m today\n\n`;
   }
-  tweet += `Shipped: ${session.shipped}`;
+  tweet += `✅ ${session.shipped}`;
   if (session.next) {
-    tweet += `\nNext: ${session.next}`;
+    tweet += `\n👉 ${session.next}`;
   }
   if (session.blockers) {
-    tweet += `\nBlockers: ${session.blockers}`;
+    tweet += `\n🚧 ${session.blockers}`;
   }
   const journeyUrl = profile ? `https://waypoints.fyi/${profile.username}` : "https://waypoints.fyi";
-  tweet += `\n\n— via Waypoints\n${journeyUrl}`;
+  tweet += `\n\n📍 via Waypoints\n${journeyUrl}`;
 
   // Try posting, refresh token if expired
   let accessToken = connection.access_token;
